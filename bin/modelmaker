@@ -11,7 +11,7 @@ from importlib import import_module
 from modelmaker.utils import make_directory
 import shutil
 
-module_folder = os.path.dirname(__file__)
+module_folder = os.path.dirname(sys.modules['modelmaker'].__file__)
 current_folder = os.path.abspath(os.curdir)
 
 # parsers
@@ -26,10 +26,9 @@ args = parser.parse_args()
 if args.subcommand == 'new':
     project_path = os.path.join(current_folder, args.name)
     print(f"Creating project in {project_path} ...")
-    make_directory(project_path)
 
     shutil.copytree(
-        os.path.join(module_folder, 'project_template'),
+        os.path.join(module_folder, 'resources', 'project_template'),
         project_path
     )
 
