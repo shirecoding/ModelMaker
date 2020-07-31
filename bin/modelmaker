@@ -1,0 +1,93 @@
+#!/usr/bin/env python3
+
+import sys
+import os
+import re
+from glob import glob
+import argparse
+import tempfile
+import subprocess
+from importlib import import_module
+from modelmaker.utils import make_directory
+import shutil
+
+module_folder = os.path.dirname(__file__)
+current_folder = os.path.abspath(os.curdir)
+
+# parsers
+parser = argparse.ArgumentParser(description='modelmaker tool for creating and validating ML models')
+subparsers = parser.add_subparsers(dest='subcommand')
+new_project_parser = subparsers.add_parser('new')
+new_project_parser.add_argument('--name', default='mymodel')
+validate_project_parser = subparsers.add_parser('validate')
+validate_project_parser.add_argument('--path', default='.')
+args = parser.parse_args()
+
+if args.subcommand == 'new':
+    project_path = os.path.join(current_folder, args.name)
+    print(f"Creating project in {project_path} ...")
+    make_directory(project_path)
+
+    shutil.copytree(
+        os.path.join(module_folder, 'project_template'),
+        project_path
+    )
+
+# elif args.subcommand == 'validate-project':
+#     project_path = os.path.abspath(args.path)
+
+#     print(f"Validating project in {project_path} ...")
+
+#     # check setup.py
+#     setup_file = os.path.join(project_path, 'setup.py')
+#     if not os.path.isfile(setup_file):
+#         raise Exception("Missing setup.py file")
+
+#     with open(setup_file, 'r') as f:
+#         # check package
+#         content = open(setup_file).read()
+#         res = re.search(r'name=(.*?)\n', content, re.DOTALL)
+#         grp = res.group(1)
+#         package = re.sub('[\"\',]', '', grp)
+#         if not package:
+#             raise Exception("Cant find package in setup.py")
+#         print(f"Found package {package} in setup.py ...")
+
+#         # find all auxiliary files
+#         auxiliary_files = glob(os.path.join(project_path, '**/auxiliary.py'), recursive=True)
+#         print(f"Found auxiliary files: {auxiliary_files}")
+#         if not auxiliary_files:
+#             raise Exception("No auxiliary files found ...")
+
+#         # find all sub projects
+#         for auxiliary_file in auxiliary_files:
+
+#             subproject = os.path.dirname(auxiliary_file)
+#             print(f"\n\nTesting {subproject} ...")
+
+#             # check IntegrationPipeline
+#             sys.path.insert(0, project_path)
+#             integration_pipeline = import_module(package).IntegrationPipeline(mode=args.mode, tensorrt=args.tensorrt)
+
+#             # run test
+#             assert integration_pipeline.test() == True, "Failed test_output"
+#             print(f"[PASSED] IntegrationPipeline Test ...")
+
+#             # passed
+#             print(f"[PASSED] {subproject} ...")
+
+#     # test cythonize
+#     with tempfile.TemporaryDirectory() as tmpdir:
+#         import subprocess
+#         proc = subprocess.Popen(
+#             ['pip3.6', 'install', '--upgrade', '--force-reinstall', '--no-deps', project_path, '-t', tmpdir]
+#         )
+#         outs, errs = proc.communicate()
+#         assert proc.returncode == 0
+#         print(f"[PASSED] Cython Test ..." )
+
+#     print(f"\n\n[PASSED] {project_path} ..." )
+
+
+else:
+    parser.print_help()
