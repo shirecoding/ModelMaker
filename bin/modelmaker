@@ -8,19 +8,22 @@ import argparse
 import tempfile
 import subprocess
 from importlib import import_module
-from modelmaker.utils import make_directory
+from modelmaker.utils import folders_in_folder
 import shutil
 
 module_folder = os.path.dirname(sys.modules['modelmaker'].__file__)
 current_folder = os.path.abspath(os.curdir)
 
+templates = { os.path.basename(t): t for t in folders_in_folder(os.path.join(module_folder, 'resources', 'templates')) }
+
 # parsers
 parser = argparse.ArgumentParser(description='modelmaker tool for creating and validating ML models')
 subparsers = parser.add_subparsers(dest='subcommand')
-new_project_parser = subparsers.add_parser('new')
+new_project_parser = subparsers.add_parser('new', description='create a new project in current directory')
 new_project_parser.add_argument('--name', default='mymodel')
-validate_project_parser = subparsers.add_parser('validate')
+validate_project_parser = subparsers.add_parser('validate', description='validate a project')
 validate_project_parser.add_argument('--path', default='.')
+templates_parser = subparsers.add_parser('templates', description='list existing templates')
 args = parser.parse_args()
 
 if args.subcommand == 'new':
@@ -31,6 +34,12 @@ if args.subcommand == 'new':
         os.path.join(module_folder, 'resources', 'project_template'),
         project_path
     )
+
+if args.subcommand == 'templates':
+    print("\nTemplates available:")
+    for t in templates:
+        print(f"    {t}")
+    print("\n")
 
 # elif args.subcommand == 'validate-project':
 #     project_path = os.path.abspath(args.path)
