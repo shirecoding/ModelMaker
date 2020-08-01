@@ -2,7 +2,7 @@ from distutils.core import setup
 from package import __version__
 
 setup(
-    name='package',
+    name='{{ package_name }}',
     version=__version__,
     author='',
     install_requires=[

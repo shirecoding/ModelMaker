@@ -10,6 +10,7 @@ import subprocess
 from importlib import import_module
 from modelmaker.utils import folders_in_folder
 import shutil
+from jinja2 import Template
 
 module_folder = os.path.dirname(sys.modules['modelmaker'].__file__)
 current_folder = os.path.abspath(os.curdir)
@@ -26,14 +27,29 @@ validate_project_parser.add_argument('--path', default='.')
 templates_parser = subparsers.add_parser('templates', description='list existing templates')
 args = parser.parse_args()
 
+############################################################################################
+## create a new project
+############################################################################################
+
 if args.subcommand == 'new':
     project_path = os.path.join(current_folder, args.name)
     print(f"Creating project in {project_path} ...")
 
+    # copy project template
     shutil.copytree(
         os.path.join(module_folder, 'resources', 'project_template'),
         project_path
     )
+
+    setup_file = os.path.join(project_path, 'setup.py')
+    template = Template(open(setup_file).read())
+    with open(setup_file, 'w') as f:
+        print(f"Generating template {setup_file} ...")
+        f.write(template.render(package_name=args.name))
+
+############################################################################################
+## list templates
+############################################################################################
 
 if args.subcommand == 'templates':
     print("\nTemplates available:")
