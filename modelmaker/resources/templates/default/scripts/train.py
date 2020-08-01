@@ -23,12 +23,16 @@ class ShapesClassDatagen(keras.utils.Sequence):
         img_size = (160, 160)
 
         def _generate_random_shape(img_size):
-            if np.random.random() > 0.5:
+            rand = np.random.random()
+            if rand > 0.66:
                 im = generate_circle(img_size)
                 cl = simple_model.class_vector("circle")
-            else:
+            elif rand > 0.33:
                 im = generate_square(img_size)
                 cl = simple_model.class_vector("square")
+            else:
+                im = np.zeros(img_size)
+                cl = simple_model.class_vector("other")
 
             # apply model preprocessing
             im = simple_model.preprocess(im)
@@ -42,11 +46,11 @@ class ShapesClassDatagen(keras.utils.Sequence):
 
 # training parameters
 batch_size = 32
-epochs = 20
+epochs = 50
 
 # generate training data
-train_data = ShapesClassDatagen(100, batch_size)
-val_data = ShapesClassDatagen(100, batch_size)
+train_data = ShapesClassDatagen(400, batch_size)
+val_data = ShapesClassDatagen(400, batch_size)
 
 # train model
 keras.backend.clear_session()

@@ -29,6 +29,7 @@ class SimpleClassification(ClassificationModelAuxiliary):
             keras.layers.Flatten(),
             keras.layers.Dense(128, activation=tf.nn.relu),
             keras.layers.Dense(128, activation=tf.nn.relu),
+            keras.layers.Dense(128, activation=tf.nn.relu),
             keras.layers.Dense(3, activation=tf.nn.softmax),
         ])
         return model
