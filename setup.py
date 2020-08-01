@@ -7,7 +7,11 @@ setup(
     version=__version__,
     author='shirecoding',
     scripts=['bin/modelmaker'],
-    install_requires=[],
+    install_requires=[
+        'Jinja2',
+        'opencv-python',
+        'numpy'
+    ],
     url='https://github.com/shirecoding/ModelMaker',
     long_description=open('README.md').read(),
     zip_safe=False,

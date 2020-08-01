@@ -8,7 +8,7 @@ import argparse
 import tempfile
 import subprocess
 from importlib import import_module
-from modelmaker.utils import folders_in_folder
+from modelmaker import folders_in_folder
 import shutil
 from jinja2 import Template
 
@@ -41,6 +41,7 @@ if args.subcommand == 'new':
         project_path
     )
 
+    # template setup.py
     setup_file = os.path.join(project_path, 'setup.py')
     template = Template(open(setup_file).read())
     with open(setup_file, 'w') as f:
