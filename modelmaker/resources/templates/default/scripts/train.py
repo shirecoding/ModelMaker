@@ -1,3 +1,4 @@
+import os
 import numpy as np
 from tensorflow import keras
 from {{ package_name }}.models import SimpleClassification
@@ -46,7 +47,7 @@ class ShapesClassDatagen(keras.utils.Sequence):
 
 # training parameters
 batch_size = 32
-epochs = 50
+epochs = 5
 
 # generate training data
 train_data = ShapesClassDatagen(400, batch_size)
@@ -63,4 +64,12 @@ model.compile(
 model.fit(train_data, steps_per_epoch=len(train_data), epochs=epochs)
 
 # save model
-model.save("/Users/benjaminhon/simple_model")
+model_folder = os.path.join(
+    os.path.dirname(
+        os.path.dirname(
+            os.path.realpath(__file__)
+        )
+    ),
+    "models"
+)
+model.save(os.path.join(model_folder, 'simple_model'))
