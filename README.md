@@ -1,5 +1,28 @@
 # ModelMaker
-Framework and utilities for defining and validating ML models
+
+Framework and utilities for creating and validating ML models
+
+## Install the tool
+
+This will install the modelmaker CLI tool
+
+```bash
+git clone https://github.com/shirecoding/ModelMaker.git
+cd ModelMaker
+pip3 install ./
+```
+
+## Create a New Project
+
+```bash
+modelmaker new --name mynewproject
+```
+
+## List Templates
+
+```bash
+modelmaker templates
+```
 
 ## Features
 
