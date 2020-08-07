@@ -21,10 +21,11 @@ setup(
     ],
     package_data={
         'modelmaker.resources': [
-            'project_template/*',
-            'project_template/**/*',
             'templates/*',
             'templates/**/*',
+            'templates/**/**/*',
+            'templates/**/**/**/*',
+            'templates/**/**/**/**/*',
         ]
     }
 )
