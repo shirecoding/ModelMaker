@@ -41,6 +41,12 @@ if args.subcommand == 'new':
         project_path
     )
 
+    # rename package folder
+    os.rename(
+        os.path.join(project_path, 'package'),
+        os.path.join(project_path, args.name),
+    )
+
     # template setup.py
     setup_file = os.path.join(project_path, 'setup.py')
     template = Template(open(setup_file).read())
