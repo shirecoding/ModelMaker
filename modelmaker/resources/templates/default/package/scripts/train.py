@@ -1,7 +1,7 @@
 import numpy as np
 from tensorflow import keras
-from default.models import SimpleClassification
-from default.utils import generate_square, generate_circle
+from {{ package_name }}.models import SimpleClassification
+from {{ package_name }}.utils import generate_square, generate_circle
 
 ######################################################################
 # train SimpleClassification

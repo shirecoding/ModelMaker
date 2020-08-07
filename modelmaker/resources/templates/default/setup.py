@@ -6,6 +6,8 @@ setup(
     version=__version__,
     author='',
     install_requires=[
+        'numpy',
+        'opencv-python'
     ],
     url='',
     long_description=open('README.md').read(),
