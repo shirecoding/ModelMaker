@@ -1,5 +1,5 @@
 from distutils.core import setup
-from package import __version__
+from {{ package_name }} import __version__
 
 setup(
     name='{{ package_name }}',

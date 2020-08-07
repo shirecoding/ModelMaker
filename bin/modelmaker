@@ -54,6 +54,13 @@ if args.subcommand == 'new':
         print(f"Generating template {setup_file} ...")
         f.write(template.render(package_name=args.name))
 
+    # template README.md
+    readme_file = os.path.join(project_path, 'README.md')
+    template = Template(open(readme_file).read())
+    with open(readme_file, 'w') as f:
+        print(f"Generating template {readme_file} ...")
+        f.write(template.render(package_name=args.name))
+
 ############################################################################################
 ## list templates
 ############################################################################################
