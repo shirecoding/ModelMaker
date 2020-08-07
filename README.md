@@ -2,6 +2,13 @@
 
 Framework and utilities for creating and validating ML models
 
+## Features
+
+- CLI tool for creation and validation of models
+- Choose from predefined templates
+- validate model
+- write custom tests for each model
+
 ## Install the tool
 
 This will install the modelmaker CLI tool
@@ -24,9 +31,6 @@ modelmaker new --name mynewproject
 modelmaker templates
 ```
 
-## Features
+**Current Templates**
 
-- CLI tool for creation and validation of models
-- Choose from predefined templates
-- validate model
-- write custom tests for each model
+- default (simple classification model)
