@@ -14,8 +14,9 @@ setup(
         'numpy'
     ],
     url='https://github.com/shirecoding/ModelMaker',
-    download_url='https://github.com/shirecoding/ModelMaker/archive/0.0.2.tar.gz',
+    download_url=f'https://github.com/shirecoding/ModelMaker/archive/{__version__}.tar.gz',
     long_description=open('README.md').read(),
+    long_description_content_type='text/markdown',
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
