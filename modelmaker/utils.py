@@ -1,6 +1,9 @@
 import os
 import shutil
 
+def reverse_dictionary(d):
+    return { v: k for k, v in d.items() }
+
 def delete_directory(directory):
     if os.path.isdir(directory):
         shutil.rmtree(directory)
