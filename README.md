@@ -19,10 +19,10 @@ cd ModelMaker
 pip3 install ./
 ```
 
-## Create a New Project
+alternatively install from pypi
 
-```bash
-modelmaker new --name mynewproject
+```
+pip3 install model-maker
 ```
 
 ## List Templates
@@ -31,6 +31,14 @@ modelmaker new --name mynewproject
 modelmaker templates
 ```
 
+## Create a New Project
+
+```bash
+modelmaker new --path MyNewProject --name mynewmodel --template default
+```
+
+This will create the python package *mynewmodel* inside directory *MyNewProject*
+
 **Current Templates**
 
-- default (simple classification model)
+- default (simple classification model using mnist dataset example)
