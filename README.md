@@ -6,8 +6,6 @@ Framework and utilities for creating and validating ML models
 
 - CLI tool for creation and validation of models
 - Choose from predefined templates
-- validate model
-- write custom tests for each model
 
 ## Install the tool
 
