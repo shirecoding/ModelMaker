@@ -6,14 +6,14 @@ file_path = os.path.abspath(__file__)
 current_directory = os.path.dirname(file_path)
 project_directory = os.path.dirname(current_directory)
 sys.path.insert(0, project_directory)
-from {{ package_name }}.models import SimpleClassification
+from {{ package_name }}.models import TextClassification
 
 # load model in development mode
-model_path = os.path.join(project_directory, 'saved_models', 'simple_model')
-simple_model = SimpleClassification(mode='development', model_path=model_path)
+model_path = os.path.join(project_directory, 'saved_models', 'imdb_sentiment_model')
+text_classifier = TextClassification(mode='development', model_path=model_path)
 
-# load mnist dataset
-_, (x_test, y_test) = keras.datasets.mnist.load_data(path="mnist.npz")
+sample_text = [
+	'The movie was cool. The animation and the graphics were out of this world. I would recommend this movie.'
+]
 
-for i, x in enumerate(x_test[0:10]):
-    print(simple_model(x), y_test[i])
+print(text_classifier(sample_text))

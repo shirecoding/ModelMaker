@@ -1,74 +1,68 @@
+import numpy as np
 import os
 import sys
-import numpy as np
+import tensorflow as tf
+import tensorflow_datasets as tfds
+
 from tensorflow import keras
+
 file_path = os.path.abspath(__file__)
 current_directory = os.path.dirname(file_path)
 project_directory = os.path.dirname(current_directory)
 sys.path.insert(0, project_directory)
-from {{ package_name }}.models import SimpleClassification
+from {{ package_name }}.models import TextClassification
 
 ######################################################################
-# train SimpleClassification
+# Prepare data
 ######################################################################
+
+BUFFER_SIZE = 10000
+BATCH_SIZE = 64
+VOCAB_SIZE = 1000
+
+# load and prepare data
+dataset, info = tfds.load('imdb_reviews', with_info=True, as_supervised=True)
+train_dataset, test_dataset = dataset['train'], dataset['test']
+
+# shuffle and batch data
+train_dataset = train_dataset.shuffle(BUFFER_SIZE).batch(BATCH_SIZE).prefetch(tf.data.AUTOTUNE)
+test_dataset = test_dataset.batch(BATCH_SIZE).prefetch(tf.data.AUTOTUNE)
+
+# create text encoder
+encoder = keras.layers.experimental.preprocessing.TextVectorization(max_tokens=VOCAB_SIZE)
+encoder.adapt(train_dataset.map(lambda text, label: text))
+
+######################################################################
+# Train Model
+######################################################################
+
+EPOCHS = 10
+VALIDATION_STEPS = 30
 
 # load model in training mode
-simple_model = SimpleClassification(mode='training')
-
-class DataGenerator(keras.utils.Sequence):
-
-    def __init__(self, batch_size, mode='train'):
-        # load mnist dataset
-        train, test = keras.datasets.mnist.load_data(path="mnist.npz")
-
-        if mode == 'train':
-            self.xs, self.ys = train
-        else:
-            self.xs, self.ys = test
-
-        self.total = self.xs.shape[0]
-        self.batch_size = batch_size
-
-
-    def __len__(self):
-        return self.total // self.batch_size
-
-    def __getitem__(self, idx):
-
-        start = idx * self.batch_size
-        end = self.batch_size + idx * self.batch_size
-
-        if self.batch_size + idx * self.batch_size  > self.total:
-            end = self.total
-        
-        xs = np.asarray([ simple_model.preprocess(x) for x in self.xs[start:end,:,:] ])
-        ys = np.asarray([ simple_model.one_hot(y) for y in self.ys[start:end] ])
-
-        return xs, ys
-
-# training parameters
-batch_size = 32
-epochs = 5
-
-# generate training data
-train_data = DataGenerator(batch_size, mode='train')
-val_data = DataGenerator(batch_size, mode='test')
+text_classifier = TextClassification(mode='training')
 
 # train model
 keras.backend.clear_session()
-model = simple_model.get_model()
+model = text_classifier.get_model(encoder)
+
 model.compile(
-    optimizer=keras.optimizers.Adam(),
-    loss='categorical_crossentropy',
+    loss=keras.losses.BinaryCrossentropy(from_logits=True),
+    optimizer=keras.optimizers.Adam(1e-4),
     metrics=['accuracy']
 )
-model.fit(
-    train_data,
-    epochs=epochs,
-    validation_data=val_data
+
+history = model.fit(
+    train_dataset,
+    epochs=EPOCHS,
+    validation_data=test_dataset, 
+    validation_steps=VALIDATION_STEPS
 )
 
-# save model
+######################################################################
+# Save Model
+######################################################################
+
 model_folder = os.path.join(
     os.path.dirname(
         os.path.dirname(
@@ -77,4 +71,4 @@ model_folder = os.path.join(
     ),
     "saved_models"
 )
-model.save(os.path.join(model_folder, 'simple_model'))
+model.save(os.path.join(model_folder, 'imdb_sentiment_model'))

@@ -1,10 +1,12 @@
-import tensorflow as tf
 import numpy as np
-from tensorflow import keras        
-from modelmaker import ClassificationModelInterface
-from .utils import normalize, rescale2d
+import tensorflow as tf
 
-class SimpleClassification(ClassificationModelInterface):
+from .utils import normalize
+from .utils import rescale2d
+from modelmaker import ClassificationModelInterface
+from tensorflow import keras
+
+class TextClassification(ClassificationModelInterface):
 
     def setup(self, mode='production', model_path=None):
         self.mode = mode
@@ -22,40 +24,55 @@ class SimpleClassification(ClassificationModelInterface):
     def labels(self):
         return {
             0: 0,
-            1: 1,
-            2: 2,
-            3: 3,
-            4: 4,
-            5: 5,
-            6: 6,
-            7: 7,
-            8: 8,
-            9: 9
+            1: 1
         }
 
-    def get_model(self):
-        num_classes = len(self.labels)
+    def get_model(self, encoder):
+        """ Get Model
+        Args:
+            encoder (keras.layers.experimental.preprocessing.TextVectorization): text encoder for tokenizing text
+
+        Returns:
+            keras.Model: model
+        """
+
         model = keras.Sequential([
-            keras.layers.Flatten(),
-            keras.layers.Dense(128, activation=tf.nn.relu),
-            keras.layers.Dense(128, activation=tf.nn.relu),
-            keras.layers.Dense(128, activation=tf.nn.relu),
-            keras.layers.Dense(num_classes, activation=tf.nn.softmax),
+            encoder,
+            keras.layers.Embedding(
+                input_dim=len(encoder.get_vocabulary()),
+                output_dim=64,
+                mask_zero=True
+            ),
+            keras.layers.Bidirectional(
+                keras.layers.LSTM(64)
+            ),
+            keras.layers.Dense(64, activation=tf.nn.relu),
+            keras.layers.Dense(1),
         ])
+
         return model
 
-    def preprocess(self, x):
-        y = rescale2d(x, (28, 28))
-        return normalize(y, 0, 1)
+    def preprocess(self, xs):
+        """
+        Args:
+            xs (list[str]): list of text strings
+        """
+        return np.array([*xs])
 
     def predict(self, x):
+        """
+        Args:
+            x (np.array): input to model
+        
+        Returns:
+            np.array: model scores
+        """
         if self.mode == "production":
             raise Exception('production mode not implemented')
         elif self.mode == 'development':
-            return self.model.predict(np.expand_dims(x, axis=0)) # insert batch axis
+            return self.model.predict(x)
         else:
             raise Exception('invalid mode')
 
-    def postprocess(self, x, orig):
-        one_hot = self.softmax_to_one_hot(x)
-        return self.one_hot_to_label(one_hot)
+    def postprocess(self, xs, orig):
+        return xs
