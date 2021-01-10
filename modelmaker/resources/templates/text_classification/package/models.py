@@ -75,4 +75,4 @@ class TextClassification(ClassificationModelInterface):
             raise Exception('invalid mode')
 
     def postprocess(self, xs, orig):
-        return xs
+        return np.ravel(xs)
