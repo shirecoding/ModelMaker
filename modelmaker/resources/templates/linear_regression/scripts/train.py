@@ -14,14 +14,15 @@ file_path = os.path.abspath(__file__)
 current_directory = os.path.dirname(file_path)
 project_directory = os.path.dirname(current_directory)
 sys.path.insert(0, project_directory)
-from {{ package_name }}.models import SimpleRegression
+from rgrmodel.models import SimpleRegression
 
 ######################################################################
 # train SimpleRegression
 ######################################################################
 
 # load model in training mode
-regression_model = SimpleRegression(mode='training')
+simple_regression = SimpleRegression(mode='training')
+model = simple_regression.get_model()
 
 # load data
 iris = load_iris()
@@ -44,10 +45,6 @@ X = pd.concat(
 y = df['sepal length (cm)']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=777)
 
-# generate training data
-train_data = DataGenerator(batch_size, mode='train')
-val_data = DataGenerator(batch_size, mode='test')
-
 # train model
 model.fit(X_train, y_train)
 
@@ -60,4 +57,4 @@ model_folder = os.path.join(
     ),
     "saved_models"
 )
-model.save_model(os.path.join(model_folder, 'regression_model'))
+simple_regression.save_model(model, os.path.join(model_folder, 'regression_model'))

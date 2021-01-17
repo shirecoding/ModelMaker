@@ -19,11 +19,13 @@ class SimpleRegression(ModelInterface):
     def get_model(self):
         return linear_model.LinearRegression()
 
-    def save_model(self, path):
-        return pickle.dump(self.model, path)
+    def save_model(self, model, path):
+        with open(path, 'wb') as f:
+            return pickle.dump(model, f)
 
     def load_model(self, path):
-        return pickle.load(path)
+        with open(path, 'rb') as f:
+            return pickle.load(f)
 
     def preprocess(self, x):
         return x

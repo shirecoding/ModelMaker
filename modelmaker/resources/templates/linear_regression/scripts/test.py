@@ -35,6 +35,6 @@ Y = df['sepal length (cm)']
 
 # predict
 for x, y in zip(X[1:10].values, Y[1:10]):
-	print(f"y_hat: {regression_model.predict(x)}, y: {y}")
+	print(f"x: {x}, y_hat: {regression_model.predict([x])}, y: {y}")
 
 
