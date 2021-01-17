@@ -43,6 +43,14 @@ class ModelInterface(ABC):
     def get_model(self):
         raise NotImplementedError("ModelInterface/get_model")
 
+    @abstractmethod
+    def save_model(self):
+        raise NotImplementedError("ModelInterface/save_model")
+
+    @abstractmethod
+    def load_model(self):
+        raise NotImplementedError("ModelInterface/load_model")
+
 class ClassificationModelInterface(ModelInterface):
     """
     Classification Model
