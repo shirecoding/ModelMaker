@@ -9,9 +9,7 @@ setup(
     author_email="shirecoding@gmail.com",
     scripts=['bin/modelmaker'],
     install_requires=[
-        'Jinja2',
-        'opencv-python',
-        'numpy'
+        'Jinja2'
     ],
     url='https://github.com/shirecoding/ModelMaker',
     download_url=f'https://github.com/shirecoding/ModelMaker/archive/{__version__}.tar.gz',
