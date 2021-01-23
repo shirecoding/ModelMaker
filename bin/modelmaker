@@ -37,7 +37,7 @@ new_project_parser = subparsers.add_parser(
     "new", description="create a new project in current directory"
 )
 new_project_parser.add_argument("--project", help="project and main class name")
-new_project_parser.add_argument("--package", help="python pacake name")
+new_project_parser.add_argument("--package", help="python package name")
 new_project_parser.add_argument(
     "--template", default="default", help="selected template"
 )
