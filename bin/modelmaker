@@ -1,42 +1,58 @@
 #!/usr/bin/env python3
 
-import sys
+import argparse
 import os
 import re
 import shutil
-import argparse
-import tempfile
 import subprocess
+import sys
+import tempfile
+
 from glob import glob
 from importlib import import_module
-from jinja2 import Template, Environment, PackageLoader, FileSystemLoader
+from jinja2 import Environment
+from jinja2 import FileSystemLoader
+from jinja2 import PackageLoader
+from jinja2 import Template
 
-from modelmaker import folders_in_folder, make_directory
+from modelmaker import folders_in_folder
+from modelmaker import make_directory
 
-module_folder = os.path.dirname(sys.modules['modelmaker'].__file__)
+module_folder = os.path.dirname(sys.modules["modelmaker"].__file__)
 current_folder = os.path.abspath(os.curdir)
 
-templates = { os.path.basename(t): t for t in folders_in_folder(os.path.join(module_folder, 'resources', 'templates')) }
+templates = {
+    os.path.basename(t): t
+    for t in folders_in_folder(os.path.join(module_folder, "resources", "templates"))
+}
 
 # parsers
-parser = argparse.ArgumentParser(description='modelmaker tool for creating and validating ML models')
-subparsers = parser.add_subparsers(dest='subcommand')
+parser = argparse.ArgumentParser(
+    description="modelmaker tool for creating and validating ML models"
+)
+subparsers = parser.add_subparsers(dest="subcommand")
 
 # parsers - new
-new_project_parser = subparsers.add_parser('new', description='create a new project in current directory')
-new_project_parser.add_argument('--project', help='project and main class name')
-new_project_parser.add_argument('--package', help='python pacake name')
-new_project_parser.add_argument('--template', default='default', help='selected template')
+new_project_parser = subparsers.add_parser(
+    "new", description="create a new project in current directory"
+)
+new_project_parser.add_argument("--project", help="project and main class name")
+new_project_parser.add_argument("--package", help="python pacake name")
+new_project_parser.add_argument(
+    "--template", default="default", help="selected template"
+)
 
 # parsers - templates
-templates_parser = subparsers.add_parser('templates', description='list existing templates')
+templates_parser = subparsers.add_parser(
+    "templates", description="list existing templates"
+)
 args = parser.parse_args()
 
 ############################################################################################
 ## create a new project
 ############################################################################################
 
-if args.subcommand == 'new':
+if args.subcommand == "new":
 
     project_path = os.path.join(current_folder, args.project)
 
@@ -45,7 +61,7 @@ if args.subcommand == 'new':
         sys.exit(1)
 
     template = args.template
-    template_folder = os.path.join(module_folder, 'resources', 'templates', template)
+    template_folder = os.path.join(module_folder, "resources", "templates", template)
 
     if not os.path.isdir(template_folder):
         print(f"{template} template does not exist ...")
@@ -57,29 +73,25 @@ if args.subcommand == 'new':
     shutil.copytree(
         template_folder,
         project_path,
-        ignore=shutil.ignore_patterns('*.pyc', '__pycache__')
+        ignore=shutil.ignore_patterns("*.pyc", "__pycache__"),
     )
 
     # rename package folder
     os.rename(
-        os.path.join(project_path, 'package'),
-        os.path.join(project_path, args.package)
+        os.path.join(project_path, "package"), os.path.join(project_path, args.package)
     )
 
     # create .gitignore
-    with open(os.path.join(project_path, '.gitignore'), 'w') as f:
-        f.write('saved_models')
+    with open(os.path.join(project_path, ".gitignore"), "w") as f:
+        f.write("saved_models")
 
     # replace template strings
     env = Environment(loader=FileSystemLoader(project_path))
-    replace = {
-        'package_name': args.package,
-        'project_name': args.project
-    }
-    for file in glob(os.path.join(project_path, '**/*'), recursive=True):
+    replace = {"package_name": args.package, "project_name": args.project}
+    for file in glob(os.path.join(project_path, "**/*"), recursive=True):
         if os.path.isfile(file):
             template = env.get_template(os.path.relpath(file, start=project_path))
-            with open(file, 'w') as f:
+            with open(file, "w") as f:
                 print(f"Generating template {file} ...")
                 f.write(template.render(**replace))
 
@@ -87,7 +99,7 @@ if args.subcommand == 'new':
 ## list templates
 ############################################################################################
 
-elif args.subcommand == 'templates':
+elif args.subcommand == "templates":
     print("\nTemplates available:")
     for t in templates:
         print(f"    {t}")
