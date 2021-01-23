@@ -40,24 +40,10 @@ EPOCHS = 10
 VALIDATION_STEPS = 30
 
 # load model in training mode
-text_classifier = {{ project_name }}(mode='training')
+model = {{ project_name }}(encoder)
 
 # train model
-keras.backend.clear_session()
-model = text_classifier.get_model(encoder)
-
-model.compile(
-    loss=keras.losses.BinaryCrossentropy(from_logits=True),
-    optimizer=keras.optimizers.Adam(1e-4),
-    metrics=['accuracy']
-)
-
-history = model.fit(
-    train_dataset,
-    epochs=EPOCHS,
-    validation_data=test_dataset, 
-    validation_steps=VALIDATION_STEPS
-)
+model.fit_model(train_dataset, test_dataset, epochs=EPOCHS, validation_steps=VALIDATION_STEPS)
 
 ######################################################################
 # Save Model
@@ -71,4 +57,4 @@ model_folder = os.path.join(
     ),
     "saved_models"
 )
-model.save(os.path.join(model_folder, '{{ package_name }}'))
+model.save_model(os.path.join(model_folder, '{{ package_name }}'))

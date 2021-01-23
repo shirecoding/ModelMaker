@@ -20,3 +20,8 @@ def files_in_folder(folder):
 
 def folders_in_folder(folder):
     return [ os.path.join(folder, n) for n in os.listdir(folder) if os.path.isdir(os.path.join(folder,n)) ]
+
+class class_or_instance_method(classmethod):
+    def __get__(self, instance, type_):
+        descr_get = super().__get__ if instance is None else self.__func__.__get__
+        return descr_get(instance, type_)

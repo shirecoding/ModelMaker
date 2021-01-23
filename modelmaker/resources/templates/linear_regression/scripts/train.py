@@ -50,17 +50,16 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random
 ######################################################################
 
 # load model in training mode
-simple_regression = {{ project_name }}(mode='training')
-model = simple_regression.get_model()
+model = {{ project_name }}()
 
 # train model
-model.fit(X_train, y_train)
+model.fit_model(X_train, y_train)
 
 ######################################################################
 # Validate Model
 ######################################################################
 
-y_pred = model.predict(X_test)
+y_pred = model(X_test)
 median_error = median_absolute_error(y_test, y_pred)
 mean_error = mean_absolute_error(y_test, y_pred)
 r2 = r2_score(y_test, y_pred)
@@ -82,4 +81,4 @@ model_folder = os.path.join(
     ),
     "saved_models"
 )
-simple_regression.save_model(model, os.path.join(model_folder, '{{ package_name }}'))
+model.save_model(os.path.join(model_folder, '{{ package_name }}'))

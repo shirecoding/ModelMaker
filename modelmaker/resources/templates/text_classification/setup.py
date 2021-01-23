@@ -7,7 +7,8 @@ setup(
     author='',
     install_requires=[
         'numpy',
-        'opencv-python'
+        'opencv-python',
+        'tensorflow-datasets'
     ],
     url='',
     long_description=open('README.md').read(),

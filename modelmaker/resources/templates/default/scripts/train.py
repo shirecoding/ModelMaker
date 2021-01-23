@@ -13,7 +13,7 @@ from {{ package_name }}.models import {{ project_name }}
 ######################################################################
 
 # load model in training mode
-simple_model = {{ project_name }}(mode='training')
+model = {{ project_name }}()
 
 class DataGenerator(keras.utils.Sequence):
 
@@ -41,8 +41,8 @@ class DataGenerator(keras.utils.Sequence):
         if self.batch_size + idx * self.batch_size  > self.total:
             end = self.total
         
-        xs = np.asarray([ simple_model.preprocess(x) for x in self.xs[start:end,:,:] ])
-        ys = np.asarray([ simple_model.one_hot(y) for y in self.ys[start:end] ])
+        xs = np.asarray([ model.preprocess(x) for x in self.xs[start:end,:,:] ])
+        ys = np.asarray([ model.one_hot(y) for y in self.ys[start:end] ])
 
         return xs, ys
 
@@ -55,18 +55,7 @@ train_data = DataGenerator(batch_size, mode='train')
 val_data = DataGenerator(batch_size, mode='test')
 
 # train model
-keras.backend.clear_session()
-model = simple_model.get_model()
-model.compile(
-    optimizer=keras.optimizers.Adam(),
-    loss='categorical_crossentropy',
-    metrics=['accuracy']
-)
-model.fit(
-    train_data,
-    epochs=epochs,
-    validation_data=val_data
-)
+model.fit_model(train_data, val_data, epochs=epochs)
 
 # save model
 model_folder = os.path.join(
@@ -77,4 +66,4 @@ model_folder = os.path.join(
     ),
     "saved_models"
 )
-model.save(os.path.join(model_folder, 'simple_model'))
+model.save_model(os.path.join(model_folder, '{{ package_name }}'))

@@ -13,7 +13,7 @@ from {{ package_name }}.models import {{ project_name }}
 
 # load model in development mode
 model_path = os.path.join(project_directory, 'saved_models', '{{ package_name }}')
-model = {{ project_name }}(mode='development', model_path=model_path)
+model = {{ project_name }}().load_model(model_path)
 
 # get input data
 iris = load_iris()
@@ -35,6 +35,6 @@ Y = df['sepal length (cm)']
 
 # predict
 for x, y in zip(X[1:10].values, Y[1:10]):
-	print(f"x: {x}, y_hat: {model.predict([x])}, y: {y}")
+	print(f"x: {x}, y_hat: {model([x])}, y: {y}")
 
 

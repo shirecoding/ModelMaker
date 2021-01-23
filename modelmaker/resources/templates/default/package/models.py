@@ -6,17 +6,8 @@ from .utils import normalize, rescale2d
 
 class {{ project_name }}(ClassificationModelInterface):
 
-    def setup(self, mode='production', model_path=None):
-        self.mode = mode
-
-        if mode == 'development':
-            self.model = keras.models.load_model(model_path)
-        elif mode == 'production':
-            raise Exception('production mode not implemented')
-        elif mode == 'training':
-            pass
-        else:
-            raise Exception('invalid mode')
+    def setup(self):
+        pass
 
     @property
     def labels(self):
@@ -44,17 +35,35 @@ class {{ project_name }}(ClassificationModelInterface):
         ])
         return model
 
+    def fit_model(self, xy_train, xy_val, epochs=1):
+        keras.backend.clear_session()
+        self.model = self.get_model()
+        self.model.compile(
+            optimizer=keras.optimizers.Adam(),
+            loss='categorical_crossentropy',
+            metrics=['accuracy']
+        )
+        self.model.fit(
+            xy_train,
+            epochs=epochs,
+            validation_data=xy_val
+        )
+        return self
+
+    def save_model(self, path):
+        self.model.save(path)
+        return self
+
+    def load_model(self, path):
+        self.model = keras.models.load_model(path)
+        return self
+
     def preprocess(self, x):
         y = rescale2d(x, (28, 28))
         return normalize(y, 0, 1)
 
     def predict(self, x):
-        if self.mode == "production":
-            raise Exception('production mode not implemented')
-        elif self.mode == 'development':
-            return self.model.predict(np.expand_dims(x, axis=0)) # insert batch axis
-        else:
-            raise Exception('invalid mode')
+        return self.model.predict(np.expand_dims(x, axis=0)) # insert batch axis
 
     def postprocess(self, x, orig):
         one_hot = self.softmax_to_one_hot(x)

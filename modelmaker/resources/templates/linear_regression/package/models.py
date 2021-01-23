@@ -5,38 +5,32 @@ import pickle
 
 class {{ project_name }}(ModelInterface):
 
-    def setup(self, mode='production', model_path=None):
-        self.mode = mode
-        if mode == 'development':
-            self.model = self.load_model(model_path)
-        elif mode == 'production':
-            raise Exception('production mode not implemented')
-        elif mode == 'training':
-            pass
-        else:
-            raise Exception('invalid mode')
+    def setup(self):
+        pass
 
     def get_model(self):
         return linear_model.LinearRegression()
 
-    def save_model(self, model, path):
+    def fit_model(self, X, y):
+        self.model = self.get_model()
+        self.model.fit(self.preprocess(X), y)
+        return self
+
+    def save_model(self, path):
         with open(path, 'wb') as f:
-            return pickle.dump(model, f)
+            pickle.dump(self.model, f)
+        return self
 
     def load_model(self, path):
         with open(path, 'rb') as f:
-            return pickle.load(f)
+            self.model = pickle.load(f)
+        return self
 
     def preprocess(self, x):
         return x
 
     def predict(self, x):
-        if self.mode == "production":
-            raise Exception('production mode not implemented')
-        elif self.mode == 'development':
-            return self.model.predict(x)
-        else:
-            raise Exception('invalid mode')
+        return self.model.predict(x)
 
     def postprocess(self, x, orig):
         return x

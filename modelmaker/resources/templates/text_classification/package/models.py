@@ -8,17 +8,8 @@ from tensorflow import keras
 
 class {{ project_name }}(ClassificationModelInterface):
 
-    def setup(self, mode='production', model_path=None):
-        self.mode = mode
-
-        if mode == 'development':
-            self.model = keras.models.load_model(model_path)
-        elif mode == 'production':
-            raise Exception('production mode not implemented')
-        elif mode == 'training':
-            pass
-        else:
-            raise Exception('invalid mode')
+    def setup(self, encoder=None):
+        self.encoder = encoder
 
     @property
     def labels(self):
@@ -52,6 +43,30 @@ class {{ project_name }}(ClassificationModelInterface):
 
         return model
 
+    def fit_model(self, xy_train, xy_val, epochs=1, validation_steps=1):
+        keras.backend.clear_session()
+        self.model = self.get_model(self.encoder)
+        self.model.compile(
+            loss=keras.losses.BinaryCrossentropy(from_logits=True),
+            optimizer=keras.optimizers.Adam(1e-4),
+            metrics=['accuracy']
+        )
+        self.model.fit(
+            xy_train,
+            epochs=epochs,
+            validation_data=xy_val,
+            validation_steps=validation_steps
+        )
+        return self
+
+    def save_model(self, path):
+        self.model.save(path)
+        return self
+
+    def load_model(self, path):
+        self.model = keras.models.load_model(path)
+        return self
+
     def preprocess(self, xs):
         """
         Args:
@@ -67,12 +82,8 @@ class {{ project_name }}(ClassificationModelInterface):
         Returns:
             np.array: model scores
         """
-        if self.mode == "production":
-            raise Exception('production mode not implemented')
-        elif self.mode == 'development':
-            return self.model.predict(x)
-        else:
-            raise Exception('invalid mode')
+        return self.model.predict(x)
+        
 
     def postprocess(self, xs, orig):
         return np.ravel(xs)

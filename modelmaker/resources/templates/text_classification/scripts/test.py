@@ -10,7 +10,7 @@ from {{ package_name }}.models import {{ project_name }}
 
 # load model in development mode
 model_path = os.path.join(project_directory, 'saved_models', '{{ package_name }}')
-text_classifier = {{ project_name }}(mode='development', model_path=model_path)
+model = {{ project_name }}().load_model(model_path)
 
 sample_text = [
     'The movie was cool. The animation and the graphics were out of this world. I would recommend this movie.',
@@ -29,5 +29,5 @@ sample_text = [
     the cult fan, and gets a much higher recommendation than the better known and lower quality 'Blood Rites'."
 ]
 
-for x, y in zip(sample_text, text_classifier(sample_text)):
-    print(f"\nreview: {x}\nscore: {y}\n"
+for x, y in zip(sample_text, model(sample_text)):
+    print(f"\nreview: {x}\nscore: {y}\n")

@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from copy import deepcopy
 import numpy as np
 from modelmaker import reverse_dictionary
+from .utils import class_or_instance_method
 
 class ModelInterface(ABC):
     """
@@ -50,6 +51,10 @@ class ModelInterface(ABC):
     @abstractmethod
     def load_model(self):
         raise NotImplementedError("ModelInterface/load_model")
+
+    @abstractmethod
+    def fit_model(self):
+        raise NotImplementedError("ModelInterface/fit_model")
 
 class ClassificationModelInterface(ModelInterface):
     """
