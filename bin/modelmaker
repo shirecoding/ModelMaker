@@ -24,9 +24,9 @@ subparsers = parser.add_subparsers(dest='subcommand')
 
 # parsers - new
 new_project_parser = subparsers.add_parser('new', description='create a new project in current directory')
-new_project_parser.add_argument('--path', default='.')
-new_project_parser.add_argument('--name', default='mymodel')
-new_project_parser.add_argument('--template', default='default')
+new_project_parser.add_argument('--project', help='project and main class name')
+new_project_parser.add_argument('--package', help='python pacake name')
+new_project_parser.add_argument('--template', default='default', help='selected template')
 
 # parsers - templates
 templates_parser = subparsers.add_parser('templates', description='list existing templates')
@@ -38,11 +38,12 @@ args = parser.parse_args()
 
 if args.subcommand == 'new':
 
-    if os.path.isdir(args.path):
-        print(f"{args.path} already exists")
+    project_path = os.path.join(current_folder, args.project)
+
+    if os.path.isdir(project_path):
+        print(f"{project_path} already exists")
         sys.exit(1)
 
-    project_path = os.path.join(args.path)
     template = args.template
     template_folder = os.path.join(module_folder, 'resources', 'templates', template)
 
@@ -62,7 +63,7 @@ if args.subcommand == 'new':
     # rename package folder
     os.rename(
         os.path.join(project_path, 'package'),
-        os.path.join(project_path, args.name)
+        os.path.join(project_path, args.package)
     )
 
     # create .gitignore
@@ -72,7 +73,8 @@ if args.subcommand == 'new':
     # replace template strings
     env = Environment(loader=FileSystemLoader(project_path))
     replace = {
-        'package_name': args.name
+        'package_name': args.package,
+        'project_name': args.project
     }
     for file in glob(os.path.join(project_path, '**/*'), recursive=True):
         if os.path.isfile(file):

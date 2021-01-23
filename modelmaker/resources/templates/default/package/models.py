@@ -4,7 +4,7 @@ from tensorflow import keras
 from modelmaker import ClassificationModelInterface
 from .utils import normalize, rescale2d
 
-class SimpleClassification(ClassificationModelInterface):
+class {{ project_name }}(ClassificationModelInterface):
 
     def setup(self, mode='production', model_path=None):
         self.mode = mode

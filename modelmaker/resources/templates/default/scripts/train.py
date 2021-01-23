@@ -6,14 +6,14 @@ file_path = os.path.abspath(__file__)
 current_directory = os.path.dirname(file_path)
 project_directory = os.path.dirname(current_directory)
 sys.path.insert(0, project_directory)
-from {{ package_name }}.models import SimpleClassification
+from {{ package_name }}.models import {{ project_name }}
 
 ######################################################################
-# train SimpleClassification
+# train {{ project_name }}
 ######################################################################
 
 # load model in training mode
-simple_model = SimpleClassification(mode='training')
+simple_model = {{ project_name }}(mode='training')
 
 class DataGenerator(keras.utils.Sequence):
 

@@ -9,11 +9,11 @@ file_path = os.path.abspath(__file__)
 current_directory = os.path.dirname(file_path)
 project_directory = os.path.dirname(current_directory)
 sys.path.insert(0, project_directory)
-from {{ package_name }}.models import SimpleRegression
+from {{ package_name }}.models import {{ project_name }}
 
 # load model in development mode
-model_path = os.path.join(project_directory, 'saved_models', 'regression_model')
-regression_model = SimpleRegression(mode='development', model_path=model_path)
+model_path = os.path.join(project_directory, 'saved_models', '{{ package_name }}')
+model = {{ project_name }}(mode='development', model_path=model_path)
 
 # get input data
 iris = load_iris()
@@ -35,6 +35,6 @@ Y = df['sepal length (cm)']
 
 # predict
 for x, y in zip(X[1:10].values, Y[1:10]):
-	print(f"x: {x}, y_hat: {regression_model.predict([x])}, y: {y}")
+	print(f"x: {x}, y_hat: {model.predict([x])}, y: {y}")
 
 

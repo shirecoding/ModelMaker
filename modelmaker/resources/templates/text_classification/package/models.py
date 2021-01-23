@@ -6,7 +6,7 @@ from .utils import rescale2d
 from modelmaker import ClassificationModelInterface
 from tensorflow import keras
 
-class TextClassification(ClassificationModelInterface):
+class {{ project_name }}(ClassificationModelInterface):
 
     def setup(self, mode='production', model_path=None):
         self.mode = mode

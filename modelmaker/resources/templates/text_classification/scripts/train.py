@@ -10,7 +10,7 @@ file_path = os.path.abspath(__file__)
 current_directory = os.path.dirname(file_path)
 project_directory = os.path.dirname(current_directory)
 sys.path.insert(0, project_directory)
-from {{ package_name }}.models import TextClassification
+from {{ package_name }}.models import {{ project_name }}
 
 ######################################################################
 # Prepare data
@@ -40,7 +40,7 @@ EPOCHS = 10
 VALIDATION_STEPS = 30
 
 # load model in training mode
-text_classifier = TextClassification(mode='training')
+text_classifier = {{ project_name }}(mode='training')
 
 # train model
 keras.backend.clear_session()
@@ -71,4 +71,4 @@ model_folder = os.path.join(
     ),
     "saved_models"
 )
-model.save(os.path.join(model_folder, 'imdb_sentiment_model'))
+model.save(os.path.join(model_folder, '{{ package_name }}'))

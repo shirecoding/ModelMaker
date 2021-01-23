@@ -4,7 +4,6 @@ import pandas as pd
 import sklearn
 import sys
 
-from sklearn import linear_model
 from sklearn.datasets import load_iris
 from sklearn.metrics import mean_absolute_error
 from sklearn.metrics import median_absolute_error
@@ -15,7 +14,7 @@ file_path = os.path.abspath(__file__)
 current_directory = os.path.dirname(file_path)
 project_directory = os.path.dirname(current_directory)
 sys.path.insert(0, project_directory)
-from rgrmodel.models import SimpleRegression
+from {{ package_name }}.models import {{ project_name }}
 
 ######################################################################
 # Load Data
@@ -51,7 +50,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random
 ######################################################################
 
 # load model in training mode
-simple_regression = SimpleRegression(mode='training')
+simple_regression = {{ project_name }}(mode='training')
 model = simple_regression.get_model()
 
 # train model
@@ -83,4 +82,4 @@ model_folder = os.path.join(
     ),
     "saved_models"
 )
-simple_regression.save_model(model, os.path.join(model_folder, 'regression_model'))
+simple_regression.save_model(model, os.path.join(model_folder, '{{ package_name }}'))

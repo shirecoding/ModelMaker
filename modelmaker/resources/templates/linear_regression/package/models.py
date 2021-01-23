@@ -3,7 +3,7 @@ from modelmaker import ModelInterface
 from sklearn import linear_model
 import pickle
 
-class SimpleRegression(ModelInterface):
+class {{ project_name }}(ModelInterface):
 
     def setup(self, mode='production', model_path=None):
         self.mode = mode
