@@ -1,8 +1,11 @@
-from abc import ABC, abstractmethod
-from copy import deepcopy
 import numpy as np
-from modelmaker import reverse_dictionary
+
 from .utils import class_or_instance_method
+from abc import ABC
+from abc import abstractmethod
+from copy import deepcopy
+from modelmaker import reverse_dictionary
+
 
 class ModelInterface(ABC):
     """
@@ -13,12 +16,7 @@ class ModelInterface(ABC):
         self.setup(*args, **kwargs)
 
     def __call__(self, x):
-        return self.postprocess(
-            self.predict(
-                self.preprocess(x)
-            ),
-            deepcopy(x)
-        )
+        return self.postprocess(self.predict(self.preprocess(x)), deepcopy(x))
 
     ###########################################################################################
     ## OVERRIDE
@@ -55,6 +53,7 @@ class ModelInterface(ABC):
     @abstractmethod
     def fit_model(self):
         raise NotImplementedError("ModelInterface/fit_model")
+
 
 class ClassificationModelInterface(ModelInterface):
     """
