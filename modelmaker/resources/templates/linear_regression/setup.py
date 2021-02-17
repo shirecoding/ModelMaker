@@ -1,18 +1,12 @@
 from distutils.core import setup
-from {{ package_name }} import __version__
 
+exec(open("{{package_name}}/version.py").read())
 setup(
-    name='{{ package_name }}',
+    name="{{ package_name }}",
     version=__version__,
-    author='',
-    install_requires=[
-        'numpy',
-        'pandas',
-        'sklearn',
-        'seaborn'
-    ],
-    url='',
-    long_description=open('README.md').read(),
+    author="",
+    install_requires=["numpy", "pandas", "sklearn", "seaborn"],
+    url="",
+    long_description=open("README.md").read(),
     zip_safe=False,
 )
-

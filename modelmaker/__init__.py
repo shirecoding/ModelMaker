@@ -1,4 +1,3 @@
-__version__ = "0.0.5"
-
-from .utils import *
 from .framework import *
+from .utils import *
+from .version import __version__

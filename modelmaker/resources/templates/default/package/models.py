@@ -1,8 +1,11 @@
-import tensorflow as tf
 import numpy as np
-from tensorflow import keras        
+import tensorflow as tf
+from tensorflow import keras
+
 from modelmaker import ClassificationModelInterface
+
 from .utils import normalize, rescale2d
+
 
 class {{ project_name }}(ClassificationModelInterface):
 

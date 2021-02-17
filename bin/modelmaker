@@ -7,16 +7,12 @@ import shutil
 import subprocess
 import sys
 import tempfile
-
 from glob import glob
 from importlib import import_module
-from jinja2 import Environment
-from jinja2 import FileSystemLoader
-from jinja2 import PackageLoader
-from jinja2 import Template
 
-from modelmaker import folders_in_folder
-from modelmaker import make_directory
+from jinja2 import Environment, FileSystemLoader, PackageLoader, Template
+
+from modelmaker import folders_in_folder, make_directory
 
 module_folder = os.path.dirname(sys.modules["modelmaker"].__file__)
 current_folder = os.path.abspath(os.curdir)

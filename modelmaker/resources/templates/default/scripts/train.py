@@ -1,12 +1,14 @@
 import os
 import sys
+
 import numpy as np
 from tensorflow import keras
+
 file_path = os.path.abspath(__file__)
 current_directory = os.path.dirname(file_path)
 project_directory = os.path.dirname(current_directory)
 sys.path.insert(0, project_directory)
-from {{ package_name }}.models import {{ project_name }}
+from {{package_name}}.models import {{ project_name }}
 
 ######################################################################
 # train {{ project_name }}
@@ -40,7 +42,7 @@ class DataGenerator(keras.utils.Sequence):
 
         if self.batch_size + idx * self.batch_size  > self.total:
             end = self.total
-        
+
         xs = np.asarray([ model.preprocess(x) for x in self.xs[start:end,:,:] ])
         ys = np.asarray([ model.one_hot(y) for y in self.ys[start:end] ])
 

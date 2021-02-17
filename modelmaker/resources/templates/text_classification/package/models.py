@@ -1,10 +1,11 @@
 import numpy as np
 import tensorflow as tf
-
-from .utils import normalize
-from .utils import rescale2d
-from modelmaker import ClassificationModelInterface
 from tensorflow import keras
+
+from modelmaker import ClassificationModelInterface
+
+from .utils import normalize, rescale2d
+
 
 class {{ project_name }}(ClassificationModelInterface):
 
@@ -78,12 +79,12 @@ class {{ project_name }}(ClassificationModelInterface):
         """
         Args:
             x (np.array): input to model
-        
+
         Returns:
             np.array: model scores
         """
         return self.model.predict(x)
-        
+
 
     def postprocess(self, xs, orig):
         return np.ravel(xs)

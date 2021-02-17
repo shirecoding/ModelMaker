@@ -1,7 +1,8 @@
 from distutils.core import setup
-from modelmaker import __version__
+
 from setuptools import find_packages
 
+exec(open("modelmaker/version.py").read())
 setup(
     name="model-maker",
     version=__version__,

@@ -1,20 +1,18 @@
-import numpy as np
 import os
-import pandas as pd
-import sklearn
 import sys
 
+import numpy as np
+import pandas as pd
+import sklearn
 from sklearn.datasets import load_iris
-from sklearn.metrics import mean_absolute_error
-from sklearn.metrics import median_absolute_error
-from sklearn.metrics import r2_score
+from sklearn.metrics import mean_absolute_error, median_absolute_error, r2_score
 from sklearn.model_selection import train_test_split
 
 file_path = os.path.abspath(__file__)
 current_directory = os.path.dirname(file_path)
 project_directory = os.path.dirname(current_directory)
 sys.path.insert(0, project_directory)
-from {{ package_name }}.models import {{ project_name }}
+from {{package_name}}.models import {{ project_name }}
 
 ######################################################################
 # Load Data

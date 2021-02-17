@@ -1,7 +1,10 @@
-import numpy as np
-from modelmaker import ModelInterface
-from sklearn import linear_model
 import pickle
+
+import numpy as np
+from sklearn import linear_model
+
+from modelmaker import ModelInterface
+
 
 class {{ project_name }}(ModelInterface):
 

@@ -1,10 +1,11 @@
+from abc import ABC, abstractmethod
+from copy import deepcopy
+
 import numpy as np
 
-from .utils import class_or_instance_method
-from abc import ABC
-from abc import abstractmethod
-from copy import deepcopy
 from modelmaker import reverse_dictionary
+
+from .utils import class_or_instance_method
 
 
 class ModelInterface(ABC):
